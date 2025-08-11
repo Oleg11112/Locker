@@ -1,23 +1,13 @@
 @echo off
-title Windows Optimization Tools - Emergency Install
-color 0C
+title Windows Optimization Tools - Installation
+color 0B
 
 echo ========================================
-echo   EMERGENCY PYTHON INSTALLATION
+echo   WINDOWS OPTIMIZATION TOOLS
+echo   Installation and Setup
 echo ========================================
 echo.
-echo This script is only needed if EXE files don't work
-echo Try running "Optimize by kenjee.bat" first!
-echo.
-echo If you see this, it means:
-echo - Your antivirus blocked the EXE files, OR
-echo - You need to install Python dependencies
-echo.
-
-pause
-
-echo.
-echo Installing Python dependencies...
+echo This will install Python dependencies for the optimization tools
 echo.
 
 REM Check if Python is installed
@@ -30,25 +20,55 @@ if %ERRORLEVEL% NEQ 0 (
         echo Please install Python 3.x from: https://python.org
         echo Make sure to check "Add Python to PATH" during installation
         echo.
+        echo After installing Python, run this script again
+        echo.
         pause
         exit
     ) else (
         set PYTHON_CMD=py
+        echo ✅ Python found: py command
     )
 ) else (
     set PYTHON_CMD=python
+    echo ✅ Python found: python command
 )
 
-echo ✅ Python found!
+echo.
+echo Installing required packages...
 echo.
 
-%PYTHON_CMD% -m pip install customtkinter>=5.2.0 keyboard>=0.13.5 pywin32>=306
+echo Installing CustomTkinter...
+%PYTHON_CMD% -m pip install customtkinter>=5.2.0 --user
+if %ERRORLEVEL% NEQ 0 (
+    echo ❌ Failed to install CustomTkinter
+    pause
+    exit
+)
+
+echo Installing Keyboard library...
+%PYTHON_CMD% -m pip install keyboard>=0.13.5 --user
+if %ERRORLEVEL% NEQ 0 (
+    echo ❌ Failed to install Keyboard
+    pause
+    exit
+)
+
+echo Installing Windows libraries...
+%PYTHON_CMD% -m pip install pywin32>=306 --user
+if %ERRORLEVEL% NEQ 0 (
+    echo ❌ Failed to install pywin32
+    pause
+    exit
+)
 
 echo.
 echo ========================================
-echo   INSTALLATION COMPLETED!
+echo   INSTALLATION COMPLETED SUCCESSFULLY!
 echo ========================================
 echo.
-echo Now you can run "Optimize by kenjee.bat"
+echo ✅ All Python dependencies installed
+echo ✅ Optimization tools ready to use
+echo.
+echo You can now run "Optimize by kenjee.bat"
 echo.
 pause
