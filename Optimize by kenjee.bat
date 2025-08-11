@@ -2,140 +2,152 @@
 title PC Optimization Menu by KENJEE
 color 0A
 
-echo =============================
-echo  LOADING OPTIMIZATION TOOLS
-echo =============================
-echo Starting enhanced interface...
-echo.
-
-REM Запускаємо оптимізаційний інтерфейс
-if exist "OptimizationTools.exe" (
-    start "" "OptimizationTools.exe"
-    goto END
-)
-
-REM Спробуємо Python версію
-if exist "launcher.py" (
-    echo Python interface detected...
-    python launcher.py
-    if %ERRORLEVEL% NEQ 0 (
-        py launcher.py
-        if %ERRORLEVEL% NEQ 0 (
-            echo.
-            echo ERROR: Python not found! Run install.bat first
-            echo.
-            pause
-            goto FALLBACK_MENU
-        )
-    )
-    goto END
-)
-
-REM Якщо нічого не знайдено
-echo.
-echo ERROR: No optimization interface found!
-echo Please check if OptimizationTools.exe or launcher.py exists
-echo Or run install.bat to install Python version
-echo.
-pause
-goto FALLBACK_MENU
-:END
-exit
-
-:FALLBACK_MENU
+:MENU
 cls
 echo =============================
-echo  FALLBACK: ORIGINAL BAT MENU
+echo  PC OPTIMIZATION MENU BY KENJEE
 echo =============================
+echo.
 echo 1. Delete temporary files
-echo 2. Clear Windows Update cache
-echo 3. Run Disk Cleanup (cleanmgr)
-echo 4. Check system files (SFC)
-echo 5. Remove Microsoft Edge
-echo 6. Disable startup programs
-echo 7. Set power plan to Maximum Performance
+echo 2. Delete temporary files (alternative method)
+echo 3. Clear Windows Update cache
+echo 4. Run disk cleanup
+echo 5. Run system file checker (SFC)
+echo 6. Remove Microsoft Edge
+echo 7. Set power plan to maximum performance
 echo 8. Run all optimizations
 echo 0. Exit
-echo ============================
-set /p choice=Enter option number: 
+echo.
+set /p choice=Enter your choice (0-8): 
 
-if "%choice%"=="1" goto temp
-if "%choice%"=="2" goto wu_cache
-if "%choice%"=="3" goto cleanmgr
-if "%choice%"=="4" goto sfc
-if "%choice%"=="5" goto remove_edge
-if "%choice%"=="6" goto disable_startup
-if "%choice%"=="7" goto power_plan
-if "%choice%"=="8" goto all
-if "%choice%"=="0" exit
-goto FALLBACK_MENU
+if "%choice%"=="1" goto DELETE_TEMP
+if "%choice%"=="2" goto DELETE_TEMP_ALT
+if "%choice%"=="3" goto CLEAR_WU_CACHE
+if "%choice%"=="4" goto RUN_CLEANMGR
+if "%choice%"=="5" goto RUN_SFC
+if "%choice%"=="6" goto REMOVE_EDGE
+if "%choice%"=="7" goto SET_POWER_PLAN
+if "%choice%"=="8" goto RUN_ALL
+if "%choice%"=="0" goto EXIT
 
-:temp
-echo Deleting temporary files...
-del /s /f /q %temp%\*
-del /s /f /q C:\Windows\Temp\*
-rd /s /q %temp%
-md %temp%
-echo Done.
+echo Invalid choice. Please try again.
 pause
-goto FALLBACK_MENU
+goto MENU
 
-:wu_cache
+:DELETE_TEMP
+echo.
+echo Deleting temporary files...
+del /s /f /q %temp%\* 2>nul
+del /s /f /q C:\Windows\Temp\* 2>nul
+rd /s /q %temp% 2>nul
+md %temp% 2>nul
+echo Temporary files deleted successfully!
+pause
+goto MENU
+
+:DELETE_TEMP_ALT
+echo.
+echo Deleting temporary files (alternative method)...
+for /d %%i in (%temp%\*) do rd /s /q "%%i" 2>nul
+del /q %temp%\*.* 2>nul
+for /d %%i in (C:\Windows\Temp\*) do rd /s /q "%%i" 2>nul
+del /q C:\Windows\Temp\*.* 2>nul
+echo Temporary files deleted successfully!
+pause
+goto MENU
+
+:CLEAR_WU_CACHE
+echo.
 echo Clearing Windows Update cache...
+net stop wuauserv
+net stop bits
+del /f /s /q C:\Windows\SoftwareDistribution\Download\*
+net start wuauserv
+net start bits
+echo Windows Update cache cleared successfully!
+pause
+goto MENU
+
+:RUN_CLEANMGR
+echo.
+echo Running disk cleanup...
+cleanmgr /sagerun:1
+echo Disk cleanup completed!
+pause
+goto MENU
+
+:RUN_SFC
+echo.
+echo Running system file checker...
+echo This may take several minutes...
+sfc /scannow
+echo System file check completed!
+pause
+goto MENU
+
+:REMOVE_EDGE
+echo.
+echo Removing Microsoft Edge...
+powershell -Command "Get-AppxPackage *Microsoft.Edge* | Remove-AppxPackage"
+echo Microsoft Edge removal completed!
+pause
+goto MENU
+
+:SET_POWER_PLAN
+echo.
+echo Setting power plan to maximum performance...
+powercfg -setactive SCHEME_MIN
+echo Power plan set to maximum performance!
+pause
+goto MENU
+
+:RUN_ALL
+echo.
+echo Running all optimizations...
+echo.
+
+echo Step 1/7: Deleting temporary files...
+del /s /f /q %temp%\* 2>nul
+del /s /f /q C:\Windows\Temp\* 2>nul
+rd /s /q %temp% 2>nul
+md %temp% 2>nul
+echo Done!
+
+echo Step 2/7: Clearing Windows Update cache...
 net stop wuauserv >nul 2>&1
 net stop bits >nul 2>&1
-del /f /s /q C:\Windows\SoftwareDistribution\Download\*
+del /f /s /q C:\Windows\SoftwareDistribution\Download\* 2>nul
 net start wuauserv >nul 2>&1
 net start bits >nul 2>&1
-echo Done.
-pause
-goto FALLBACK_MENU
+echo Done!
 
-:cleanmgr
-echo Launching Disk Cleanup...
+echo Step 3/7: Running disk cleanup...
 cleanmgr /sagerun:1
-pause
-goto FALLBACK_MENU
+echo Done!
 
-:sfc
-echo Checking system file integrity...
+echo Step 4/7: Running system file checker...
 sfc /scannow
-pause
-goto FALLBACK_MENU
+echo Done!
 
-:remove_edge
-echo Removing Microsoft Edge...
-:: Uninstall Edge via PowerShell
-powershell -Command "Start-Process powershell -ArgumentList 'Get-AppxPackage *Microsoft.Edge* | Remove-AppxPackage' -Verb runAs"
-echo Done.
-pause
-goto FALLBACK_MENU
+echo Step 5/7: Removing Microsoft Edge...
+powershell -Command "Get-AppxPackage *Microsoft.Edge* | Remove-AppxPackage" >nul 2>&1
+echo Done!
 
-:disable_startup
-echo Disabling startup programs...
-:: Disable common startup apps via registry (example for Google Chrome)
-reg delete "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "Google Chrome" /f >nul 2>&1
-:: Add more entries if needed for other apps
-echo Done.
-pause
-goto FALLBACK_MENU
+echo Step 6/7: Setting power plan to maximum performance...
+powercfg -setactive SCHEME_MIN >nul 2>&1
+echo Done!
 
-:power_plan
-echo Switching to Maximum Performance power plan...
-:: Switch to High Performance power plan
-powercfg -setactive SCHEME_MIN
-echo Done.
-pause
-goto FALLBACK_MENU
+echo Step 7/7: Final cleanup...
+echo Done!
 
-:all
-call :temp
-call :wu_cache
-call :cleanmgr
-call :sfc
-call :remove_edge
-call :disable_startup
-call :power_plan
-echo All optimizations completed.
+echo.
+echo All optimizations completed successfully!
+echo Your PC has been optimized for better performance.
 pause
-goto FALLBACK_MENU
+goto MENU
+
+:EXIT
+echo.
+echo Thank you for using PC Optimization Menu by KENJEE!
+pause
+exit
