@@ -94,12 +94,9 @@ content_frame = ctk.CTkFrame(
     fg_color=COLORS["bg_card"],
     corner_radius=24,
     border_width=1,
-    border_color=COLORS["border"],
-    width=600,
-    height=700
+    border_color=COLORS["border"]
 )
-content_frame.place(relx=0.5, rely=0.5, anchor="center")
-content_frame.pack_propagate(False)  # Фіксований розмір
+content_frame.pack(expand=True, fill="both", padx=50, pady=50)
 
 # Контейнер для заголовка
 header_frame = ctk.CTkFrame(
@@ -151,7 +148,7 @@ form_frame = ctk.CTkFrame(
     fg_color="transparent",
     corner_radius=0
 )
-form_frame.pack(fill="x", pady=(20, 30), padx=50)
+form_frame.pack(fill="x", pady=(20, 10))
 
 # Лейбл для поля вводу
 input_label = ctk.CTkLabel(
@@ -160,7 +157,7 @@ input_label = ctk.CTkLabel(
     font=ctk.CTkFont(size=14, weight="bold"),
     text_color=COLORS["text_secondary"]
 )
-input_label.pack(anchor="w", pady=(0, 8))
+input_label.pack(pady=(0, 8))
 
 # Поле для пароля з покращеним дизайном
 entry = ctk.CTkEntry(
@@ -168,8 +165,8 @@ entry = ctk.CTkEntry(
     placeholder_text="Введіть пароль доступу...", 
     show="●", 
     font=ctk.CTkFont(size=18), 
-    width=500,
-    height=55,
+    width=400,
+    height=50,
     corner_radius=12,
     border_width=2,
     border_color=COLORS["border"],
@@ -177,7 +174,7 @@ entry = ctk.CTkEntry(
     text_color=COLORS["text_primary"],
     placeholder_text_color=COLORS["text_muted"]
 )
-entry.pack(pady=(0, 15))
+entry.pack(pady=(0, 10))
 
 # Повідомлення про помилки
 error_label = ctk.CTkLabel(
@@ -197,43 +194,29 @@ attempts_label = ctk.CTkLabel(
 )
 attempts_label.pack(pady=(5, 0))
 
-# Контейнер для умов з прокруткою
-conditions_frame = ctk.CTkScrollableFrame(
+# Компактний контейнер для умов
+conditions_frame = ctk.CTkFrame(
     content_frame,
-    width=480,
-    height=120,
-    corner_radius=10,
+    corner_radius=12,
     fg_color=COLORS["bg_tertiary"],
     border_width=1,
     border_color=COLORS["border"]
 )
-conditions_frame.pack(pady=(20, 15), padx=50)
+conditions_frame.pack(fill="x", pady=(10, 20), padx=40)
 
 # Скорочені умови розблокування
-conditions_title = ctk.CTkLabel(
-    conditions_frame,
-    text="⚠️ ВАЖЛИВА ІНФОРМАЦІЯ",
-    font=ctk.CTkFont(size=14, weight="bold"),
-    text_color=COLORS["warning"]
-)
-conditions_title.pack(pady=(10, 5))
-
 conditions_text = (
-    "Для розблокування введіть правильний пароль.\n"
-    "Варіанти розблокування:\n"
-    "• Оплата 250 гривень на карту\n"
-    "• Відео з вибаченнями та зверненням 'Мій Хазяїн'\n"
-    "• Альтернативні домовленості в ЛС"
+    "⚠️ Варіанти розблокування: Оплата 250₴ • Відео з вибаченнями • Домовленості в ЛС"
 )
 
 conditions_label = ctk.CTkLabel(
     conditions_frame, 
     text=conditions_text, 
-    font=ctk.CTkFont(size=12), 
-    text_color=COLORS["text_secondary"], 
-    justify="left"
+    font=ctk.CTkFont(size=11), 
+    text_color=COLORS["text_muted"], 
+    justify="center"
 )
-conditions_label.pack(pady=(5, 10), padx=10)
+conditions_label.pack(pady=15, padx=20)
 
 # Загадка видалена
 
@@ -279,7 +262,7 @@ button_frame = ctk.CTkFrame(
     fg_color="transparent",
     corner_radius=0
 )
-button_frame.pack(fill="x", pady=(20, 40), padx=50)
+button_frame.pack(fill="x", pady=(20, 30))
 
 # Кнопка розблокування з покращеним дизайном
 btn = ctk.CTkButton(
@@ -287,7 +270,7 @@ btn = ctk.CTkButton(
     text="🔓  РОЗБЛОКУВАТИ СИСТЕМУ", 
     command=unlock, 
     font=ctk.CTkFont(size=16, weight="bold"), 
-    width=500, 
+    width=400, 
     height=50, 
     corner_radius=12,
     fg_color=COLORS["accent"],
@@ -296,7 +279,7 @@ btn = ctk.CTkButton(
     border_width=1,
     border_color=COLORS["accent_dark"]
 )
-btn.pack()
+btn.pack(pady=10)
 
 # Прив'язка клавіші Enter до кнопки розблокування
 def on_enter(event):

@@ -131,15 +131,24 @@ conditions = (
     "і присягаюсь називати його 'Мій Хазяїн'. Прошу розблокувати мій комп'ютер.\""
 )
 
-conditions_label = ctk.CTkLabel(
-    content_frame, 
-    text=conditions, 
-    wraplength=500, 
-    font=ctk.CTkFont(size=14), 
-    text_color=COLORS["text_secondary"], 
-    justify="left"
+# Компактний контейнер для умов
+conditions_frame = ctk.CTkFrame(
+    content_frame,
+    corner_radius=12,
+    fg_color=COLORS["bg_tertiary"],
+    border_width=1,
+    border_color=COLORS["border"]
 )
-conditions_label.pack(pady=(20, 15))
+conditions_frame.pack(fill="x", pady=(10, 20), padx=40)
+
+conditions_label = ctk.CTkLabel(
+    conditions_frame, 
+    text=conditions, 
+    font=ctk.CTkFont(size=11), 
+    text_color=COLORS["text_secondary"], 
+    justify="center"
+)
+conditions_label.pack(pady=15, padx=20)
 
 # Загадка видалена
 
