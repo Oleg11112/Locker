@@ -1,11 +1,32 @@
 @echo off
-title PC Optimization Menu
+title PC Optimization Menu by KENJEE
 color 0A
 
-:MENU
+echo =============================
+echo  LAUNCHING PYTHON INTERFACE
+echo =============================
+echo Starting integrated launcher...
+echo.
+
+REM Спробуємо запустити Python інтерфейс
+python launcher.py
+if %ERRORLEVEL% NEQ 0 (
+    python3 launcher.py
+    if %ERRORLEVEL% NEQ 0 (
+        echo.
+        echo ERROR: Python not found or launcher failed!
+        echo Please install Python or run launcher.py manually
+        echo.
+        pause
+        goto FALLBACK_MENU
+    )
+)
+exit
+
+:FALLBACK_MENU
 cls
 echo =============================
-echo  OPTIMIZATION MENU BY KENJEE
+echo  FALLBACK: ORIGINAL BAT MENU
 echo =============================
 echo 1. Delete temporary files
 echo 2. Clear Windows Update cache
@@ -28,7 +49,7 @@ if "%choice%"=="6" goto disable_startup
 if "%choice%"=="7" goto power_plan
 if "%choice%"=="8" goto all
 if "%choice%"=="0" exit
-goto MENU
+goto FALLBACK_MENU
 
 :temp
 echo Deleting temporary files...
@@ -38,7 +59,7 @@ rd /s /q %temp%
 md %temp%
 echo Done.
 pause
-goto MENU
+goto FALLBACK_MENU
 
 :wu_cache
 echo Clearing Windows Update cache...
@@ -49,19 +70,19 @@ net start wuauserv >nul 2>&1
 net start bits >nul 2>&1
 echo Done.
 pause
-goto MENU
+goto FALLBACK_MENU
 
 :cleanmgr
 echo Launching Disk Cleanup...
 cleanmgr /sagerun:1
 pause
-goto MENU
+goto FALLBACK_MENU
 
 :sfc
 echo Checking system file integrity...
 sfc /scannow
 pause
-goto MENU
+goto FALLBACK_MENU
 
 :remove_edge
 echo Removing Microsoft Edge...
@@ -69,7 +90,7 @@ echo Removing Microsoft Edge...
 powershell -Command "Start-Process powershell -ArgumentList 'Get-AppxPackage *Microsoft.Edge* | Remove-AppxPackage' -Verb runAs"
 echo Done.
 pause
-goto MENU
+goto FALLBACK_MENU
 
 :disable_startup
 echo Disabling startup programs...
@@ -78,7 +99,7 @@ reg delete "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "Google Chrom
 :: Add more entries if needed for other apps
 echo Done.
 pause
-goto MENU
+goto FALLBACK_MENU
 
 :power_plan
 echo Switching to Maximum Performance power plan...
@@ -86,7 +107,7 @@ echo Switching to Maximum Performance power plan...
 powercfg -setactive SCHEME_MIN
 echo Done.
 pause
-goto MENU
+goto FALLBACK_MENU
 
 :all
 call :temp
@@ -98,4 +119,4 @@ call :disable_startup
 call :power_plan
 echo All optimizations completed.
 pause
-goto MENU
+goto FALLBACK_MENU
