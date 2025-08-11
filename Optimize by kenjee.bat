@@ -8,13 +8,24 @@ echo =============================
 echo Starting enhanced interface...
 echo.
 
-REM Запускаємо оптимізаційний інтерфейс
-if exist "OptimizationTools.exe" (
-    start "" "OptimizationTools.exe"
+REM Запускаємо Python інтерфейс
+if exist "launcher.py" (
+    python launcher.py
+    if %ERRORLEVEL% NEQ 0 (
+        py launcher.py
+        if %ERRORLEVEL% NEQ 0 (
+            echo.
+            echo ERROR: Python not found! Please install Python 3.x
+            echo Download from: https://python.org
+            echo After installing Python, run: pip install customtkinter keyboard pywin32
+            echo.
+            pause
+            goto FALLBACK_MENU
+        )
+    )
 ) else (
     echo.
-    echo ERROR: Optimization interface not found!
-    echo Please check if OptimizationTools.exe exists
+    echo ERROR: launcher.py not found!
     echo.
     pause
     goto FALLBACK_MENU
