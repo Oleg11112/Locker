@@ -9,7 +9,6 @@ import sys
 
 # Паролі
 PASSWORD = "14707"
-FAKE_PASSWORD = "Гусь"
 BACKUP_PASSWORD = "unlockmepls"
 
 # Конфігурація видалена: скрімер та гусь прибрані
@@ -177,15 +176,7 @@ conditions_label = ctk.CTkLabel(
 )
 conditions_label.pack(pady=(20, 15))
 
-# Загадка-фейк з кращим стилем
-riddle_text = "💡 Загадка: Не корабель, а з вітрилом — не труба, а з голосилом. Хто я?"
-riddle = ctk.CTkLabel(
-    content_frame, 
-    text=riddle_text, 
-    font=ctk.CTkFont(size=18, weight="bold"), 
-    text_color=COLORS["warning"]
-)
-riddle.pack(pady=(15, 30))
+# Загадка видалена
 
 # Скрімер видалено
 
@@ -217,8 +208,6 @@ def unlock():
 
     if user_input == PASSWORD:
         root.destroy()
-    elif user_input.lower().strip() == FAKE_PASSWORD.lower():
-        error_label.configure(text="Ох ні! Це фейковий пароль!")
     elif user_input == BACKUP_PASSWORD:
         root.destroy()
     else:
