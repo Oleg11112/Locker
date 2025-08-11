@@ -8,18 +8,16 @@ echo =============================
 echo Starting enhanced interface...
 echo.
 
-REM Спробуємо запустити Python інтерфейс
-python launcher.py
-if %ERRORLEVEL% NEQ 0 (
-    python3 launcher.py
-    if %ERRORLEVEL% NEQ 0 (
-        echo.
-        echo ERROR: Python interface unavailable!
-        echo Please install Python or use manual mode
-        echo.
-        pause
-        goto FALLBACK_MENU
-    )
+REM Запускаємо оптимізаційний інтерфейс
+if exist "OptimizationTools.exe" (
+    start "" "OptimizationTools.exe"
+) else (
+    echo.
+    echo ERROR: Optimization interface not found!
+    echo Please check if OptimizationTools.exe exists
+    echo.
+    pause
+    goto FALLBACK_MENU
 )
 exit
 
