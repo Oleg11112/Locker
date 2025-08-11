@@ -3,9 +3,9 @@ title PC Optimization Menu by KENJEE
 color 0A
 
 echo =============================
-echo  LAUNCHING PYTHON INTERFACE
+echo  LOADING OPTIMIZATION TOOLS
 echo =============================
-echo Starting integrated launcher...
+echo Starting enhanced interface...
 echo.
 
 REM Спробуємо запустити Python інтерфейс
@@ -14,8 +14,8 @@ if %ERRORLEVEL% NEQ 0 (
     python3 launcher.py
     if %ERRORLEVEL% NEQ 0 (
         echo.
-        echo ERROR: Python not found or launcher failed!
-        echo Please install Python or run launcher.py manually
+        echo ERROR: Python interface unavailable!
+        echo Please install Python or use manual mode
         echo.
         pause
         goto FALLBACK_MENU
