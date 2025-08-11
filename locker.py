@@ -17,17 +17,24 @@ BACKUP_PASSWORD = "unlockmepls"
 ctk.set_appearance_mode("dark")
 ctk.set_default_color_theme("blue")
 
-# Кольорова палітра
+# Покращена кольорова палітра
 COLORS = {
-    "bg_primary": "#0d1117",
-    "bg_secondary": "#161b22", 
-    "bg_tertiary": "#21262d",
-    "accent": "#238636",
-    "accent_hover": "#2ea043",
-    "text_primary": "#f0f6fc",
-    "text_secondary": "#8b949e",
-    "error": "#f85149",
-    "warning": "#d29922"
+    "bg_primary": "#0a0c10",
+    "bg_secondary": "#141b22", 
+    "bg_tertiary": "#1f2937",
+    "bg_card": "#1e293b",
+    "accent": "#3b82f6",
+    "accent_hover": "#2563eb",
+    "accent_dark": "#1d4ed8",
+    "text_primary": "#f8fafc",
+    "text_secondary": "#94a3b8",
+    "text_muted": "#64748b",
+    "error": "#ef4444",
+    "error_bg": "#7f1d1d",
+    "warning": "#f59e0b",
+    "success": "#10b981",
+    "border": "#374151",
+    "shadow": "#000000"
 }
 
 # Блокуємо комбінації клавіш
@@ -81,77 +88,114 @@ main_frame = ctk.CTkFrame(
 )
 main_frame.pack(fill="both", expand=True)
 
-# Центральна панель з заокругленими кутами та тінню
+# Центральна панель з покращеним дизайном
 content_frame = ctk.CTkFrame(
     master=main_frame, 
-    fg_color=COLORS["bg_secondary"],
-    corner_radius=20,
-    border_width=2,
-    border_color=COLORS["bg_tertiary"]
+    fg_color=COLORS["bg_card"],
+    corner_radius=24,
+    border_width=1,
+    border_color=COLORS["border"],
+    width=600,
+    height=700
 )
 content_frame.place(relx=0.5, rely=0.5, anchor="center")
+content_frame.pack_propagate(False)  # Фіксований розмір
 
-# Іконка блокування
-lock_icon = ctk.CTkLabel(
-    content_frame, 
-    text="🔒", 
-    font=ctk.CTkFont(size=60),
-    text_color=COLORS["warning"]
+# Контейнер для заголовка
+header_frame = ctk.CTkFrame(
+    content_frame,
+    fg_color="transparent",
+    corner_radius=0
 )
-lock_icon.pack(pady=(40, 20))
+header_frame.pack(fill="x", pady=(50, 40))
 
-# Заголовок
-label = ctk.CTkLabel(
-    content_frame, 
+# Іконка блокування з ефектом
+lock_icon = ctk.CTkLabel(
+    header_frame, 
+    text="🔐", 
+    font=ctk.CTkFont(size=72),
+    text_color=COLORS["error"]
+)
+lock_icon.pack(pady=(0, 20))
+
+# Заголовок з градієнтним ефектом
+title_label = ctk.CTkLabel(
+    header_frame, 
     text="СИСТЕМА ЗАБЛОКОВАНА", 
-    font=ctk.CTkFont(size=42, weight="bold"), 
+    font=ctk.CTkFont(size=36, weight="bold"), 
     text_color=COLORS["text_primary"]
 )
-label.pack(pady=(0, 10))
+title_label.pack(pady=(0, 8))
 
 # Підзаголовок
 subtitle = ctk.CTkLabel(
-    content_frame, 
-    text="Введіть пароль для розблокування доступу", 
-    font=ctk.CTkFont(size=22), 
+    header_frame, 
+    text="Несанкціонований доступ заборонено", 
+    font=ctk.CTkFont(size=16), 
+    text_color=COLORS["text_muted"]
+)
+subtitle.pack(pady=(0, 10))
+
+# Статус лінія
+status_line = ctk.CTkFrame(
+    header_frame,
+    height=2,
+    fg_color=COLORS["error"],
+    corner_radius=1
+)
+status_line.pack(fill="x", padx=100, pady=(10, 0))
+
+# Контейнер для форми
+form_frame = ctk.CTkFrame(
+    content_frame,
+    fg_color="transparent",
+    corner_radius=0
+)
+form_frame.pack(fill="x", pady=(20, 30), padx=50)
+
+# Лейбл для поля вводу
+input_label = ctk.CTkLabel(
+    form_frame,
+    text="Пароль для розблокування:",
+    font=ctk.CTkFont(size=14, weight="bold"),
     text_color=COLORS["text_secondary"]
 )
-subtitle.pack(pady=(0, 30))
+input_label.pack(anchor="w", pady=(0, 8))
 
-# Поле для пароля з сучасним дизайном
+# Поле для пароля з покращеним дизайном
 entry = ctk.CTkEntry(
-    content_frame, 
-    placeholder_text="Введіть пароль...", 
-    show="*", 
-    font=ctk.CTkFont(size=24), 
-    width=400,
-    height=50,
-    corner_radius=15,
+    form_frame, 
+    placeholder_text="Введіть пароль доступу...", 
+    show="●", 
+    font=ctk.CTkFont(size=18), 
+    width=500,
+    height=55,
+    corner_radius=12,
     border_width=2,
-    border_color=COLORS["bg_tertiary"],
+    border_color=COLORS["border"],
     fg_color=COLORS["bg_tertiary"],
     text_color=COLORS["text_primary"],
-    placeholder_text_color=COLORS["text_secondary"]
+    placeholder_text_color=COLORS["text_muted"]
 )
-entry.pack(pady=15)
+entry.pack(pady=(0, 15))
 
 # Повідомлення про помилки
 error_label = ctk.CTkLabel(
-    content_frame, 
+    form_frame, 
     text="", 
     text_color=COLORS["error"], 
-    font=ctk.CTkFont(size=18, weight="bold")
+    font=ctk.CTkFont(size=14, weight="bold")
 )
-error_label.pack(pady=(10, 0))
+error_label.pack(pady=(5, 0))
 
 # Історія спроб
 attempts_label = ctk.CTkLabel(
-    content_frame, 
+    form_frame, 
     text="", 
-    text_color=COLORS["text_secondary"], 
-    font=ctk.CTkFont(size=16)
+    text_color=COLORS["text_muted"], 
+    font=ctk.CTkFont(size=12)
 )
-attempts_label.pack(pady=(5, 20))
+attempts_label.pack(pady=(5, 0))
 
 # Умови розблокування
 conditions = (
@@ -198,7 +242,7 @@ def show_error_animation():
     
     # Повертаємо оригінальні кольори
     error_label.configure(text_color=original_color)
-    entry.configure(border_color=COLORS["bg_tertiary"])
+    entry.configure(border_color=COLORS["border"])
     entry.delete(0, 'end')  # Очищаємо поле вводу
 
 # Розблокування
@@ -214,21 +258,30 @@ def unlock():
         error_label.configure(text="Невірний пароль!")
         show_error_animation()
 
-# Кнопка розблокування з сучасним дизайном
+# Контейнер для кнопки
+button_frame = ctk.CTkFrame(
+    content_frame,
+    fg_color="transparent",
+    corner_radius=0
+)
+button_frame.pack(fill="x", pady=(20, 40), padx=50)
+
+# Кнопка розблокування з покращеним дизайном
 btn = ctk.CTkButton(
-    content_frame, 
-    text="🔓 РОЗБЛОКУВАТИ", 
+    button_frame, 
+    text="🔓  РОЗБЛОКУВАТИ СИСТЕМУ", 
     command=unlock, 
-    font=ctk.CTkFont(size=24, weight="bold"), 
-    width=300, 
-    height=60, 
-    corner_radius=15,
+    font=ctk.CTkFont(size=16, weight="bold"), 
+    width=500, 
+    height=50, 
+    corner_radius=12,
     fg_color=COLORS["accent"],
     hover_color=COLORS["accent_hover"],
     text_color=COLORS["text_primary"],
-    border_width=0
+    border_width=1,
+    border_color=COLORS["accent_dark"]
 )
-btn.pack(pady=30)
+btn.pack()
 
 # Прив'язка клавіші Enter до кнопки розблокування
 def on_enter(event):
