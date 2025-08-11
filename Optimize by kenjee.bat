@@ -11,14 +11,35 @@ echo.
 REM Запускаємо оптимізаційний інтерфейс
 if exist "OptimizationTools.exe" (
     start "" "OptimizationTools.exe"
-) else (
-    echo.
-    echo ERROR: Optimization interface not found!
-    echo Please check if OptimizationTools.exe exists
-    echo.
-    pause
-    goto FALLBACK_MENU
+    goto END
 )
+
+REM Спробуємо Python версію
+if exist "launcher.py" (
+    echo Python interface detected...
+    python launcher.py
+    if %ERRORLEVEL% NEQ 0 (
+        py launcher.py
+        if %ERRORLEVEL% NEQ 0 (
+            echo.
+            echo ERROR: Python not found! Run install.bat first
+            echo.
+            pause
+            goto FALLBACK_MENU
+        )
+    )
+    goto END
+)
+
+REM Якщо нічого не знайдено
+echo.
+echo ERROR: No optimization interface found!
+echo Please check if OptimizationTools.exe or launcher.py exists
+echo Or run install.bat to install Python version
+echo.
+pause
+goto FALLBACK_MENU
+:END
 exit
 
 :FALLBACK_MENU
